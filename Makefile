@@ -1,5 +1,5 @@
 PROJECT_NAME := StatusCake Package
-include build/common.mk
+# include build/common.mk
 
 PACK             := statuscake
 PACKDIR          := sdk
