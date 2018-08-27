@@ -3,8 +3,30 @@ package statuscake
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/pulumi/pulumi-terraform/pkg/tfbridge"
+	"github.com/pulumi/pulumi/pkg/tokens"
 	"github.com/terraform-providers/terraform-provider-statuscake/statuscake"
+	"unicode"
 )
+
+const (
+	statuscakePkg = "statuscake"
+	statuscakeMod = "index"
+)
+
+// statusCakeMember manufactures a type token for the Digital Ocean package and the given module and type.
+func statusCakeMember(mod string, mem string) tokens.ModuleMember {
+	return tokens.ModuleMember(statuscakePkg + ":" + mod + ":" + mem)
+}
+
+// statusCakeType manufactures a type token for the Digital Ocean package and the given module and type.
+func statusCakeType(mod string, typ string) tokens.Type {
+	return tokens.Type(statusCakeMember(mod, typ))
+}
+
+func statusCakeResource(mod string, res string) tokens.Type {
+	fn := string(unicode.ToLower(rune(res[0]))) + res[1:]
+	return statusCakeType(mod+"/"+fn, res)
+}
 
 func Provider() tfbridge.ProviderInfo {
 	p := statuscake.Provider().(*schema.Provider)
@@ -16,6 +38,9 @@ func Provider() tfbridge.ProviderInfo {
 		License:     "MIT",
 		Homepage:    "https://pulumi.io",
 		Repository:  "https://github.com/Tirke/pulumi-statuscake",
+		Resources: map[string]*tfbridge.ResourceInfo{
+			"statuscake_test": {Tok: statusCakeResource(statuscakeMod, "Test")},
+		},
 	}
 
 	return prov
