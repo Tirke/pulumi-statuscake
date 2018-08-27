@@ -15,7 +15,7 @@ func Provider() tfbridge.ProviderInfo {
 		Keywords:    []string{"pulumi", "statuscake"},
 		License:     "MIT",
 		Homepage:    "https://pulumi.io",
-		Repository:  "",
+		Repository:  "https://github.com/Tirke/pulumi-statuscake",
 	}
 
 	return prov
