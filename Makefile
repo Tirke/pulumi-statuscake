@@ -1,5 +1,5 @@
 PROJECT_NAME := StatusCake Package
-# include build/common.mk
+include build/common.mk
 
 PACK             := statuscake
 PACKDIR          := sdk
@@ -14,7 +14,7 @@ PYPI_VERSION    := $(shell scripts/get-py-version)
 GOMETALINTERBIN=gometalinter
 GOMETALINTER=${GOMETALINTERBIN} --config=Gometalinter.json
 
-TESTPARALLELISM := 10
+TESTPARALLELISM := 4
 
 # NOTE: Since the plugin is published using the nodejs style semver version
 # We set the PLUGIN_VERSION to be the same as the version we use when building
@@ -47,7 +47,7 @@ lint::
 	$(GOMETALINTER) ./cmd/... resources.go | sort ; exit "$${PIPESTATUS[0]}"
 
 install::
-	GOBIN=$(PULUMI_BIN) go install -ldflags "-X github.com/pulumi/pulumi-statuscake/pkg/version.Version=${VERSION}" ${PROJECT}/cmd/${PROVIDER}
+	GOBIN=$(PULUMI_BIN) go install -ldflags "-X github.com/pulumi/pulumi-aws/pkg/version.Version=${VERSION}" ${PROJECT}/cmd/${PROVIDER}
 	[ ! -e "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)" ] || rm -rf "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
 	mkdir -p "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
 	cp -r ${PACKDIR}/nodejs/bin/. "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
@@ -59,7 +59,8 @@ install::
 	cd ${PACKDIR}/python/bin && $(PIP) install --user -e .
 
 test_all::
-	PATH=$(PULUMI_BIN):$(PATH) go test -v -cover -timeout 1h -parallel ${TESTPARALLELISM} ./examples ./tests/...
+	PATH=$(PULUMI_BIN):$(PATH) go test -v -cover -timeout 1h -parallel ${TESTPARALLELISM} ./examples
+	PATH=$(PULUMI_BIN):$(PATH) go test -v -cover -timeout 1h -parallel ${TESTPARALLELISM} ./tests/...
 
 .PHONY: publish_tgz
 publish_tgz:
