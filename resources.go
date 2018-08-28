@@ -41,6 +41,17 @@ func Provider() tfbridge.ProviderInfo {
 		Resources: map[string]*tfbridge.ResourceInfo{
 			"statuscake_test": {Tok: statusCakeResource(statuscakeMod, "Test")},
 		},
+		JavaScript: &tfbridge.JavaScriptInfo{
+			Dependencies: map[string]string{
+				"@pulumi/pulumi":    "^0.15.0",
+				"builtin-modules":   "3.0.0",
+				"read-package-tree": "^5.2.1",
+				"resolve":           "^1.8.1",
+			},
+			DevDependencies: map[string]string{
+				"@types/node": "^10.9.2",
+			},
+		},
 	}
 
 	return prov

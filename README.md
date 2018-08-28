@@ -11,11 +11,11 @@ This package is available in many languages in the standard packaging formats.
 
 To use from JavaScript or TypeScript in Node.js, install using either `npm`:
 
-    $ npm install @jen20/pulumi-digitalocean
+    $ npm install @pulumi/pulumi-statuscake
 
 or `yarn`:
 
-    $ yarn add @jen20/pulumi-digitalocean
+    $ yarn add @pulumi/pulumi-statuscake
 
 ### Python
 
@@ -25,7 +25,7 @@ A Python SDK is not yet published.
 
 To use from Go, use `go get` to grab the latest version of the library
 
-    $ go get github.com/jen20/pulumi-digitalocean/sdk/go/...
+    $ go get github.com/Tirke/pulumi-statuscake/sdk/go/
 
 ## Reference
 

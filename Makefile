@@ -22,32 +22,32 @@ TESTPARALLELISM := 10
 build::
 	go install -ldflags "-X github.com/pulumi/pulumi-statuscake/pkg/version.Version=${VERSION}" ${PROJECT}/cmd/${TFGEN}
 	go install -ldflags "-X github.com/pulumi/pulumi-statuscake/pkg/version.Version=${VERSION}" ${PROJECT}/cmd/${PROVIDER}
-#	for LANGUAGE in "nodejs" "python" "go" ; do \
-#		$(TFGEN) $$LANGUAGE --overlays overlays/$$LANGUAGE/ --out ${PACKDIR}/$$LANGUAGE/ || exit 3 ; \
-#	done
-#	cd ${PACKDIR}/nodejs/ && \
-#		yarn install && \
-#		yarn run tsc && \
-#		cp ../../README.md ../../LICENSE package.json yarn.lock ./bin/ && \
-#		sed -i.bak "s/\$${VERSION}/$(VERSION)/g" ./bin/package.json
-#	cd ${PACKDIR}/python/ && \
-#		if [ $$(command -v pandoc) ]; then \
-#			pandoc --from=markdown --to=rst --output=README.rst ../../README.md; \
-#		else \
-#			echo "warning: pandoc not found, not generating README.rst"; \
-#			echo "" > README.rst; \
-#		fi && \
-#		$(PYTHON) setup.py clean --all 2>/dev/null && \
-#		rm -rf ./bin/ ../python.bin/ && cp -R . ../python.bin && mv ../python.bin ./bin && \
-#		sed -i.bak -e "s/\$${VERSION}/$(PYPI_VERSION)/g" -e "s/\$${PLUGIN_VERSION}/$(VERSION)/g" ./bin/setup.py && \
-#		rm ./bin/setup.py.bak && \
-#		cd ./bin && $(PYTHON) setup.py build sdist
+	for LANGUAGE in "nodejs" "python" "go" ; do \
+		$(TFGEN) $$LANGUAGE --out ${PACKDIR}/$$LANGUAGE/ || exit 3 ; \
+	done
+	cd ${PACKDIR}/nodejs/ && \
+		yarn install && \
+		yarn run tsc && \
+		cp ../../README.md ../../LICENSE package.json yarn.lock ./bin/ && \
+		sed -i.bak "s/\$${VERSION}/$(VERSION)/g" ./bin/package.json
+	cd ${PACKDIR}/python/ && \
+		if [ $$(command -v pandoc) ]; then \
+			pandoc --from=markdown --to=rst --output=README.rst ../../README.md; \
+		else \
+			echo "warning: pandoc not found, not generating README.rst"; \
+			echo "" > README.rst; \
+		fi && \
+		$(PYTHON) setup.py clean --all 2>/dev/null && \
+		rm -rf ./bin/ ../python.bin/ && cp -R . ../python.bin && mv ../python.bin ./bin && \
+		sed -i.bak -e "s/\$${VERSION}/$(PYPI_VERSION)/g" -e "s/\$${PLUGIN_VERSION}/$(VERSION)/g" ./bin/setup.py && \
+		rm ./bin/setup.py.bak && \
+		cd ./bin && $(PYTHON) setup.py build sdist
 
 lint::
 	$(GOMETALINTER) ./cmd/... resources.go | sort ; exit "$${PIPESTATUS[0]}"
 
 install::
-	GOBIN=$(PULUMI_BIN) go install -ldflags "-X github.com/jen20/pulumi-digitalocean/pkg/version.Version=${VERSION}" ${PROJECT}/cmd/${PROVIDER}
+	GOBIN=$(PULUMI_BIN) go install -ldflags "-X github.com/pulumi/pulumi-statuscake/pkg/version.Version=${VERSION}" ${PROJECT}/cmd/${PROVIDER}
 	[ ! -e "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)" ] || rm -rf "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
 	mkdir -p "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
 	cp -r ${PACKDIR}/nodejs/bin/. "$(PULUMI_NODE_MODULES)/$(NODE_MODULE_NAME)"
