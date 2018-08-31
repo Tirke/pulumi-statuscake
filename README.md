@@ -9,13 +9,7 @@ This package is available in many languages in the standard packaging formats.
 
 ### Node.js (Java/TypeScript)
 
-To use from JavaScript or TypeScript in Node.js, install using either `npm`:
-
-    $ npm install @pulumi/pulumi-statuscake
-
-or `yarn`:
-
-    $ yarn add @pulumi/pulumi-statuscake
+A Node SDK is not yet published.
 
 ### Python
 
